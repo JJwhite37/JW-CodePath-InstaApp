@@ -8,8 +8,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.instantsnapapp.R;
+import com.parse.LogInCallback;
+import com.parse.ParseException;
+import com.parse.ParseUser;
+import com.parse.SignUpCallback;
 
 public class LoginActivity extends AppCompatActivity {
     public static final String TAG = "LoginActivity";
@@ -22,6 +27,13 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getSupportActionBar().hide();
+
+        if(ParseUser.getCurrentUser() != null) {
+            Intent i = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(i);
+            finish();
+        }
 
         etUserName = findViewById(R.id.etUserName);
         etPassword = findViewById(R.id.etPassword);
@@ -44,18 +56,44 @@ public class LoginActivity extends AppCompatActivity {
                 Log.i(TAG, "Sign up was clicked");
                 String userName = etUserName.getText().toString();
                 String password = etPassword.getText().toString();
-                signIn(userName, password);
+                signUp(userName, password);
             }
         });
     }
 
     private void signIn(String userName, String password){
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
+        ParseUser.logInInBackground(userName, password, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error during login", e);
+                    Toast.makeText(LoginActivity.this, "Invalid Login.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Toast.makeText(LoginActivity.this, "Successful Login.", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
     }
 
     private void signUp(String userName, String password){
-        Intent i = new Intent(this, MainActivity.class);
-        startActivity(i);
+        ParseUser user = new ParseUser();
+        user.setUsername(userName);
+        user.setPassword(password);
+        user.signUpInBackground(new SignUpCallback() {
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error during login", e);
+                    Toast.makeText(LoginActivity.this, "Username is already taken.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                Toast.makeText(LoginActivity.this, "Successful Sign up.", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(i);
+                finish();
+            }
+        });
     }
 }
