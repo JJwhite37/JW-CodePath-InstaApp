@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.MainActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
         android:id="@+id/ivLogo"
@@ -12,24 +11,37 @@
         android:layout_height="49dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="85dp"
+        android:layout_marginStart="104dp"
         android:layout_marginTop="1dp"
         app:srcCompat="@drawable/nav_logo_whiteout" />
 
+    <TextView
+        android:id="@+id/tvProfileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivLogo"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="155dp"
+        tools:text="username here" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvFeed"
-        android:layout_width="match_parent"
-        android:layout_height="600dp"
-        android:layout_below="@id/ivLogo" />
+    <Button
+        android:id="@+id/btnSignout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvProfileName"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="139dp"
+        android:layout_marginTop="40dp"
+        android:text="Sign out" />
 
     <ImageView
         android:id="@+id/ivNewPost"
         android:layout_width="65dp"
         android:layout_height="55dp"
-        android:layout_below="@+id/rvFeed"
+        android:layout_below="@+id/btnSignout"
         android:layout_marginStart="70dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="350dp"
         android:layout_toEndOf="@+id/ivHome"
         app:srcCompat="@drawable/instagram_new_post_outline_24" />
 
@@ -37,20 +49,19 @@
         android:id="@+id/ivHome"
         android:layout_width="65dp"
         android:layout_height="55dp"
-        android:layout_below="@+id/rvFeed"
+        android:layout_below="@+id/btnSignout"
         android:layout_alignParentStart="true"
         android:layout_marginStart="27dp"
-        android:layout_marginTop="10dp"
-        app:srcCompat="@drawable/instagram_home_filled_24" />
+        android:layout_marginTop="350dp"
+        app:srcCompat="@drawable/instagram_home_outline_24" />
 
     <ImageView
         android:id="@+id/ivProfile"
         android:layout_width="65dp"
         android:layout_height="55dp"
-        android:layout_below="@+id/rvFeed"
+        android:layout_below="@+id/btnSignout"
         android:layout_marginStart="70dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="350dp"
         android:layout_toEndOf="@+id/ivNewPost"
-        app:srcCompat="@drawable/instagram_user_outline_24" />
-
+        app:srcCompat="@drawable/instagram_user_filled_24" />
 </RelativeLayout>

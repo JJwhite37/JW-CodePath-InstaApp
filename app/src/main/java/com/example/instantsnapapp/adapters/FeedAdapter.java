@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.instantsnapapp.R;
+import com.example.instantsnapapp.models.Post;
 
 import java.util.List;
 
@@ -19,9 +20,11 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>{
     private final Context context;
+    private List<Post> posts;
 
-    public FeedAdapter(Context context) {
+    public FeedAdapter(Context context, List<Post> posts) {
         this.context = context;
+        this.posts = posts;
     }
     @NonNull
     @Override
@@ -32,13 +35,18 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull FeedAdapter.ViewHolder holder, int position) {
-        //Tweets tweet = tweets.get(position);
-        holder.bind();
+        Post post = posts.get(position);
+        holder.bind(post);
+    }
+
+    public void addAll(List<Post> postFeed){
+        posts.addAll(postFeed);
+        notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return posts.size();
     }
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvUserName;
@@ -54,16 +62,16 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>{
             ivPostPic = itemView.findViewById(R.id.ivPostPic);
         }
 
-        public void bind() {
-            //tvUserName.setText(tweets.body);
-            //tvPostDesc.setText("@" + tweets.user.userName);
+        public void bind(Post posts) {
+            tvUserName.setText(posts.getUser().getUsername());
+            tvPostDesc.setText(posts.getDescription());
             //Glide.with(context)
-            //        .load(tweets.user.profilePicUrl)
+            //        .load(posts.getUser().)
             //        .transform(new CropCircleTransformation())
             //        .into(ivProfilePic);
-            //Glide.with(context)
-            //        .load(tweets.user.profilePicUrl)
-            //        .into(ivPostPic);
+            Glide.with(context)
+                    .load(posts.getImage().getUrl())
+                    .into(ivPostPic);
         }
     }
 }

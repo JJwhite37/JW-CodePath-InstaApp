@@ -2,11 +2,15 @@ package com.example.instantsnapapp;
 
 import android.app.Application;
 
+import com.example.instantsnapapp.models.Post;
 import com.parse.Parse;
+import com.parse.ParseObject;
 
 public class ParseApplication extends Application {
     public void onCreate() {
         super.onCreate();
+
+        ParseObject.registerSubclass(Post.class);
 
         Parse.initialize(new Parse.Configuration.Builder(this)
                 .applicationId("wopR2672aSLGOKqYh6XkanTSRNTHeCCJcqFnXF1t")
