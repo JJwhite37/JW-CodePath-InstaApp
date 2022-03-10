@@ -1,6 +1,8 @@
 package com.example.instantsnapapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.util.Pair;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.instantsnapapp.R;
@@ -21,6 +24,8 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
     private ImageView ivNewPost;
     private ImageView ivProfile;
     private List<Post> allPosts;
+    private TextView tvUserName;
+    private ImageView ivProfilePic;
+    private ImageView ivPostPic;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,10 +71,32 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        adapter.setOnItemClickListener(new FeedAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                ivPostPic = itemView.findViewById(R.id.ivPostPic);
+                tvUserName = itemView.findViewById(R.id.tvUserName);
+                ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
+
+                Intent i = new Intent(MainActivity.this, DetailActivity.class);
+                i.putExtra("Posts", allPosts.get(position));
+
+                Pair<View, String> p1 = Pair.create(ivPostPic, "post");
+                Pair<View, String> p2 = Pair.create(ivProfilePic, "pic");
+                Pair<View, String> p3 = Pair.create(tvUserName, "userName");
+
+                ActivityOptionsCompat options = ActivityOptionsCompat.
+                        makeSceneTransitionAnimation(MainActivity.this, p1, p2, p3);
+                startActivity(i, options.toBundle());
+            }
+        });
     }
 
     private void retrieveHomeFeed() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        query.orderByDescending("createdAt");
+        query.setLimit(20);
         query.include(Post.KEY_USER);
         query.include(Post.KEY_IMAGE);
         query.findInBackground(new FindCallback<Post>() {

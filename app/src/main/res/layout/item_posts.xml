@@ -14,6 +14,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
+        android:transitionName="pic"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -24,7 +25,8 @@
         android:layout_marginStart="18dp"
         android:layout_marginTop="16dp"
         android:layout_toEndOf="@+id/ivProfilePic"
-        android:text="TextView" />
+        android:text="TextView"
+        android:transitionName="userName" />
 
     <ImageView
         android:id="@+id/ivDots"
@@ -42,55 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivProfilePic"
         android:layout_marginTop="3dp"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars"
+        android:transitionName="post"/>
 
-    <ImageView
-        android:id="@+id/ivHeart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ivPostPic"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="3dp"
-        android:layout_marginTop="4dp"
-        app:srcCompat="@drawable/ufi_heart" />
-
-    <ImageView
-        android:id="@+id/ivComment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ivPostPic"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="4dp"
-        android:layout_toEndOf="@+id/ivHeart"
-        app:srcCompat="@drawable/ufi_comment" />
-
-    <ImageView
-        android:id="@+id/ivSend"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ivPostPic"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="4dp"
-        android:layout_toEndOf="@+id/ivComment"
-        app:srcCompat="@drawable/direct" />
-
-    <ImageView
-        android:id="@+id/ivSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ivPostPic"
-        android:layout_marginStart="279dp"
-        android:layout_marginTop="4dp"
-        android:layout_toEndOf="@+id/ivSend"
-        app:srcCompat="@drawable/ufi_save_icon" />
-
-    <TextView
-        android:id="@+id/tvPostDesc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ivSend"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:text="TextView" />
 </RelativeLayout>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/tvProfileName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivPicProfile"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="140dp"
+        android:layout_marginTop="10dp"
+        android:transitionName="userName"
+        tools:text="username here" />
+
+    <ImageView
+        android:id="@+id/ivPicProfile"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="153dp"
+        android:layout_marginTop="3dp"
+        android:transitionName="pic"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvProfileFeed"
+        android:layout_width="match_parent"
+        android:layout_height="470dp"
+        android:layout_below="@+id/tvProfileName"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="5dp" />
+
+</RelativeLayout>
