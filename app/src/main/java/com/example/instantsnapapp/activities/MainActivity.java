@@ -1,10 +1,14 @@
 package com.example.instantsnapapp.activities;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.util.Pair;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,11 +23,17 @@ import android.widget.Toast;
 
 import com.example.instantsnapapp.R;
 import com.example.instantsnapapp.adapters.FeedAdapter;
+import com.example.instantsnapapp.fragments.FeedFragment;
+import com.example.instantsnapapp.fragments.PostFragment;
+import com.example.instantsnapapp.fragments.ProfileFragment;
 import com.example.instantsnapapp.models.Post;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.example.instantsnapapp.EndlessRecyclerViewScrollListener;
 
 import org.parceler.Parcels;
 
@@ -32,82 +42,35 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
-    private RecyclerView rvFeed;
-    private FeedAdapter adapter;
-    private ImageView ivNewPost;
-    private ImageView ivProfile;
-    private List<Post> allPosts;
-    private TextView tvUserName;
-    private ImageView ivProfilePic;
-    private ImageView ivPostPic;
+    final FragmentManager fragmentManager = getSupportFragmentManager();
+    private BottomNavigationView bnMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        ivNewPost = findViewById(R.id.ivNewPost);
-        ivProfile = findViewById(R.id.ivProfile);
-        rvFeed = findViewById(R.id.rvFeed);
-
-        allPosts = new ArrayList<>();
-        adapter = new FeedAdapter(this, allPosts);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        rvFeed.setLayoutManager(linearLayoutManager);
-        rvFeed.setAdapter(adapter);
-        retrieveHomeFeed();
-
-        ivProfile.setOnClickListener(new View.OnClickListener() {
+        bnMain = findViewById(R.id.bnMain);
+        fragmentManager.beginTransaction().replace(R.id.flContainer,new FeedFragment()).commit();
+        bnMain.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, ProfileActivity.class);
-                startActivity(i);
-            }
-        });
-        ivNewPost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, PostActivity.class);
-                startActivity(i);
-            }
-        });
-
-        adapter.setOnItemClickListener(new FeedAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View itemView, int position) {
-                ivPostPic = itemView.findViewById(R.id.ivPostPic);
-                tvUserName = itemView.findViewById(R.id.tvUserName);
-                ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
-
-                Intent i = new Intent(MainActivity.this, DetailActivity.class);
-                i.putExtra("Posts", allPosts.get(position));
-
-                Pair<View, String> p1 = Pair.create(ivPostPic, "post");
-                Pair<View, String> p2 = Pair.create(ivProfilePic, "pic");
-                Pair<View, String> p3 = Pair.create(tvUserName, "userName");
-
-                ActivityOptionsCompat options = ActivityOptionsCompat.
-                        makeSceneTransitionAnimation(MainActivity.this, p1, p2, p3);
-                startActivity(i, options.toBundle());
-            }
-        });
-    }
-
-    private void retrieveHomeFeed() {
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.orderByDescending("createdAt");
-        query.setLimit(20);
-        query.include(Post.KEY_USER);
-        query.include(Post.KEY_IMAGE);
-        query.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> posts, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Error during query", e);
-                    return;
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Fragment fragment;
+                switch (item.getItemId()){
+                    case R.id.bnHome:
+                        fragment = new FeedFragment();
+                        break;
+                    case R.id.bnPost:
+                        fragment = new PostFragment();
+                        break;
+                    case R.id.bnProfile:
+                        fragment = new ProfileFragment();
+                        break;
+                    default:
+                        fragment = new FeedFragment();
+                        break;
                 }
-                allPosts.addAll(posts);
-                adapter.notifyDataSetChanged();
+                fragmentManager.beginTransaction().replace(R.id.flContainer,fragment).commit();
+                return true;
             }
         });
     }

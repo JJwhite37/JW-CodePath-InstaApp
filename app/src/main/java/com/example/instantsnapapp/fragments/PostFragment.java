@@ -1,4 +1,12 @@
-package com.example.instantsnapapp.activities;
+package com.example.instantsnapapp.fragments;
+import static android.app.Activity.RESULT_OK;
+
+import com.example.instantsnapapp.R;
+import com.example.instantsnapapp.models.Post;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,7 +16,9 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -16,19 +26,12 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
-
-import com.example.instantsnapapp.R;
-import com.example.instantsnapapp.models.Post;
-import com.parse.ParseException;
-import com.parse.ParseFile;
-import com.parse.ParseUser;
-import com.parse.SaveCallback;
+import androidx.fragment.app.Fragment;
 
 import java.io.File;
 
-public class PostActivity extends AppCompatActivity {
+public class PostFragment extends Fragment {
     public static final String TAG = "PostActivity";
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 87;
     public String photoFileName = "photo.jpg";
@@ -39,38 +42,27 @@ public class PostActivity extends AppCompatActivity {
     private Boolean snapBool = false;
     private File photoFile;
     private ProgressBar pbPost;
-    private ImageView ivProfile;
-    private ImageView ivHome;
 
+    public PostFragment() {
 
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState) {
+        return inflater.inflate(R.layout.fragment_post, container, false);
+    }
 
-        btnSnap = findViewById(R.id.btnSnap);
-        btnPost = findViewById(R.id.btnPost);
-        ivPicturePost = findViewById(R.id.ivPicturePost);
-        etCaption = findViewById(R.id.etCaption);
-        pbPost = findViewById(R.id.pbPost);
-        ivProfile = findViewById(R.id.ivProfile);
-        ivHome = findViewById(R.id.ivHome);
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //setContentView(R.layout.activity_post);
 
-        ivProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(PostActivity.this, ProfileActivity.class);
-                startActivity(i);
-            }
-        });
-        ivHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(PostActivity.this, MainActivity.class);
-                startActivity(i);
-            }
-        });
+        btnSnap = view.findViewById(R.id.btnSnap);
+        btnPost = view.findViewById(R.id.btnPost);
+        ivPicturePost = view.findViewById(R.id.ivPicturePost);
+        etCaption = view.findViewById(R.id.etCaption);
+        pbPost = view.findViewById(R.id.pbPost);
+
 
         btnPost.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,11 +70,11 @@ public class PostActivity extends AppCompatActivity {
                 pbPost.setVisibility(ProgressBar.VISIBLE);
                 String description = etCaption.getText().toString();
                 if (description.isEmpty()){
-                    Toast.makeText(PostActivity.this, "Invalid post,No description.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Invalid post,No description.", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 else if (photoFile == null){
-                    Toast.makeText(PostActivity.this, "Invalid post,No Picture.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Invalid post,No Picture.", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 ParseUser curentUser = ParseUser.getCurrentUser();
@@ -107,12 +99,12 @@ public class PostActivity extends AppCompatActivity {
         // wrap File object into a content provider
         // required for API >= 24
         // See https://guides.codepath.com/android/Sharing-Content-with-Intents#sharing-files-with-api-24-or-higher
-        Uri fileProvider = FileProvider.getUriForFile(PostActivity.this, "com.codepath.fileprovider", photoFile);
+        Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider", photoFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
 
         // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
         // So as long as the result is not null, it's safe to use the intent.
-        if (intent.resolveActivity(getPackageManager()) != null) {
+        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
             // Start the image capture intent to take photo
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
@@ -122,7 +114,7 @@ public class PostActivity extends AppCompatActivity {
         // Get safe storage directory for photos
         // Use `getExternalFilesDir` on Context to access package-specific directories.
         // This way, we don't need to request external read/write runtime permissions.
-        File mediaStorageDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
+        File mediaStorageDir = new File(getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), TAG);
 
         // Create the storage directory if it does not exist
         if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
@@ -136,7 +128,7 @@ public class PostActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
@@ -146,7 +138,7 @@ public class PostActivity extends AppCompatActivity {
                 // Load the taken image into a preview
                 ivPicturePost.setImageBitmap(takenImage);
             } else { // Result was a failure
-                Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -164,7 +156,7 @@ public class PostActivity extends AppCompatActivity {
                     return;
                 }
                 Log.i(TAG, "Post was a success");
-                Toast.makeText(PostActivity.this, "Post was successful", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Post was successful", Toast.LENGTH_SHORT).show();
                 pbPost.setVisibility(ProgressBar.INVISIBLE);
                 ivPicturePost.setImageResource(0);
                 etCaption.setText("");

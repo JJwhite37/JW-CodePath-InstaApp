@@ -6,51 +6,22 @@
     android:layout_height="match_parent"
     tools:context=".activities.MainActivity">
 
-    <ImageView
-        android:id="@+id/ivLogo"
-        android:layout_width="197dp"
-        android:layout_height="49dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="85dp"
-        android:layout_marginTop="1dp"
-        app:srcCompat="@drawable/nav_logo_whiteout" />
-
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvFeed"
+    <FrameLayout
+        android:id="@+id/flContainer"
         android:layout_width="match_parent"
-        android:layout_height="600dp"
-        android:layout_below="@id/ivLogo" />
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bnMain"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="0dp">
 
-    <ImageView
-        android:id="@+id/ivNewPost"
-        android:layout_width="65dp"
-        android:layout_height="55dp"
-        android:layout_below="@+id/rvFeed"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="10dp"
-        android:layout_toEndOf="@+id/ivHome"
-        app:srcCompat="@drawable/instagram_new_post_outline_24" />
+    </FrameLayout>
 
-    <ImageView
-        android:id="@+id/ivHome"
-        android:layout_width="65dp"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bnMain"
+        android:layout_width="match_parent"
         android:layout_height="55dp"
-        android:layout_below="@+id/rvFeed"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="27dp"
-        android:layout_marginTop="10dp"
-        app:srcCompat="@drawable/instagram_home_filled_24" />
-
-    <ImageView
-        android:id="@+id/ivProfile"
-        android:layout_width="65dp"
-        android:layout_height="55dp"
-        android:layout_below="@+id/rvFeed"
-        android:layout_marginStart="70dp"
-        android:layout_marginTop="10dp"
-        android:layout_toEndOf="@+id/ivNewPost"
-        app:srcCompat="@drawable/instagram_user_outline_24" />
+        android:layout_alignParentBottom="true"
+        android:background="@color/instaButton"
+        app:menu="@menu/menu_bottom_navigation" />
 
 </RelativeLayout>
