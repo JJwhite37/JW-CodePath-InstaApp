@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.example.instantsnapapp.R;
@@ -32,6 +33,7 @@ public class PostDetailFragment extends Fragment {
     private ImageView ivProfilePic;
     private ImageView ivPostPic;
     private ParseUser userName;
+    private Post posts;
 
     public PostDetailFragment() {
 
@@ -45,14 +47,17 @@ public class PostDetailFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-/*
+
         tvUserName = view.findViewById(R.id.tvUserName);
         tvPostDesc = view.findViewById(R.id.tvPostDesc);
         ivProfilePic = view.findViewById(R.id.ivProfilePic);
         ivPostPic = view.findViewById(R.id.ivPostPic);
 
 
-        Post posts = getIntent().getParcelableExtra("Posts");
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            posts = bundle.getParcelable("Post");
+        }
 
         tvUserName.setText(posts.getUser().getUsername());
         tvPostDesc.setText(posts.getDescription());
@@ -72,7 +77,14 @@ public class PostDetailFragment extends Fragment {
                 if (posts.getUser().getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
 
                 } else {
-
+                    Fragment someFragment = new UserFeedFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("Post", posts);
+                    someFragment.setArguments(bundle);
+                    FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                    transaction.replace(R.id.flContainer, someFragment );
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                 }
             }
         });
@@ -87,6 +99,6 @@ public class PostDetailFragment extends Fragment {
                 }
             }
         });
- */
+
     }
 }

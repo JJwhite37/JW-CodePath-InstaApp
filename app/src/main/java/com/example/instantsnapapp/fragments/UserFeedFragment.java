@@ -52,6 +52,7 @@ public class UserFeedFragment extends Fragment {
     private ProfileAdapter adapter;
     private ParseUser currentUser = ParseUser.getCurrentUser();
     private ParseUser userName;
+    private Post posts;
 
     public UserFeedFragment() {
 
@@ -59,7 +60,7 @@ public class UserFeedFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState) {
-        return inflater.inflate(R.layout.fragment_post, container, false);
+        return inflater.inflate(R.layout.fragment_user_feed, container, false);
     }
 
     @Override
@@ -67,10 +68,16 @@ public class UserFeedFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //setContentView(R.layout.activity_user_feed);
 
-/*
+
         tvProfileName = view.findViewById(R.id.tvProfileName);
         ivPicProfile = view.findViewById(R.id.ivPicProfile);
         rvProfileFeed =view.findViewById(R.id.rvProfileFeed);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            posts = bundle.getParcelable("Post");
+        }
+
 
         profilePosts = new ArrayList<>();
         adapter = new ProfileAdapter(getContext(), profilePosts);
@@ -108,6 +115,5 @@ public class UserFeedFragment extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
- */
     }
 }

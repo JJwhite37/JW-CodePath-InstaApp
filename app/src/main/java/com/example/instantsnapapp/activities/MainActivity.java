@@ -42,6 +42,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
+    private FragmentManager fragmentManager2 = getSupportFragmentManager();
     final FragmentManager fragmentManager = getSupportFragmentManager();
     private BottomNavigationView bnMain;
 
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         bnMain = findViewById(R.id.bnMain);
         fragmentManager.beginTransaction().replace(R.id.flContainer,new FeedFragment()).commit();
+
         bnMain.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {

@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -74,9 +76,19 @@ public class FeedFragment extends Fragment {
         adapter.setOnItemClickListener(new FeedAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
-                ivPostPic = itemView.findViewById(R.id.ivPostPic);
-                tvUserName = itemView.findViewById(R.id.tvUserName);
-                ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
+                //ivPostPic = itemView.findViewById(R.id.ivPostPic);
+                //tvUserName = itemView.findViewById(R.id.tvUserName);
+                //ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
+
+                Fragment someFragment = new PostDetailFragment();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("Post", allPosts.get(position));
+                someFragment.setArguments(bundle);
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.flContainer, someFragment );
+                transaction.addToBackStack(null);
+                transaction.commit();
+
 
 
             }
