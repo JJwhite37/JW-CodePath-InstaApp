@@ -26,7 +26,7 @@
         android:layout_marginTop="16dp"
         android:layout_toEndOf="@+id/ivProfilePic"
         android:text="TextView"
-        android:transitionName="userName"/>
+        android:transitionName="userName" />
 
     <ImageView
         android:id="@+id/ivDots"
@@ -64,7 +64,7 @@
         android:layout_below="@+id/ivPostPic"
         android:layout_marginStart="7dp"
         android:layout_marginTop="4dp"
-        android:layout_toEndOf="@+id/ivHeart"
+        android:layout_toEndOf="@+id/tvCount"
         app:srcCompat="@drawable/ufi_comment" />
 
     <ImageView
@@ -96,5 +96,17 @@
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
         android:text="TextView" />
+
+    <TextView
+        android:id="@+id/tvCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivPostPic"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="6dp"
+        android:layout_toEndOf="@+id/ivHeart"
+        android:textColor="#151515"
+        android:textStyle="bold"
+        tools:text="0" />
 
 </RelativeLayout>

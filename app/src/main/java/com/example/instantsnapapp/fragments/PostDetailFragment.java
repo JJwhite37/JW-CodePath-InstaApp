@@ -20,9 +20,11 @@ import androidx.fragment.app.FragmentTransaction;
 import com.bumptech.glide.Glide;
 import com.example.instantsnapapp.R;
 import com.example.instantsnapapp.models.Post;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.io.File;
+import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
@@ -30,10 +32,14 @@ public class PostDetailFragment extends Fragment {
     public static final String TAG = "DetailActivity";
     private TextView tvUserName;
     private TextView tvPostDesc;
+    private TextView tvCount;
     private ImageView ivProfilePic;
     private ImageView ivPostPic;
+    private ImageView ivHeart;
     private ParseUser userName;
     private Post posts;
+    private int likeCount;
+    private List<String> likedList;
 
     public PostDetailFragment() {
 
@@ -50,14 +56,19 @@ public class PostDetailFragment extends Fragment {
 
         tvUserName = view.findViewById(R.id.tvUserName);
         tvPostDesc = view.findViewById(R.id.tvPostDesc);
+        tvCount = view.findViewById(R.id.tvCount);
         ivProfilePic = view.findViewById(R.id.ivProfilePic);
         ivPostPic = view.findViewById(R.id.ivPostPic);
+        ivHeart = view.findViewById(R.id.ivHeart);
 
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             posts = bundle.getParcelable("Post");
         }
+
+        likeCount = posts.getLikedList().size();
+        tvCount.setText(String.valueOf(likeCount));
 
         tvUserName.setText(posts.getUser().getUsername());
         tvPostDesc.setText(posts.getDescription());
@@ -96,6 +107,19 @@ public class PostDetailFragment extends Fragment {
 
                 } else {
 
+                }
+            }
+        });
+
+        ivHeart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ParseUser user = ParseUser.getCurrentUser();
+                if (!posts.getLikedList().contains(user.getUsername())) {
+                    posts.addUnique("userLiked", user.getUsername());
+                    posts.saveInBackground();
+                    likeCount++;
+                    tvCount.setText(String.valueOf(likeCount));
                 }
             }
         });
