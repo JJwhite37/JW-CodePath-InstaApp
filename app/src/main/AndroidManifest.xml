@@ -36,17 +36,5 @@
         <activity
             android:name=".activities.MainActivity">
         </activity>
-        <activity
-            android:name=".activities.PostActivity">
-        </activity>
-        <activity
-            android:name=".activities.ProfileActivity">
-        </activity>
-        <activity
-            android:name=".activities.DetailActivity">
-        </activity>
-        <activity
-            android:name=".activities.UserFeedActivity">
-        </activity>
     </application>
 </manifest>
