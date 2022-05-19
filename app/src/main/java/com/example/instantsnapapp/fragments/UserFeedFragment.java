@@ -30,6 +30,7 @@ import com.bumptech.glide.Glide;
 import com.example.instantsnapapp.R;
 import com.example.instantsnapapp.adapters.ProfileAdapter;
 import com.example.instantsnapapp.models.Post;
+import com.example.instantsnapapp.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -53,6 +54,7 @@ public class UserFeedFragment extends Fragment {
     private ParseUser currentUser = ParseUser.getCurrentUser();
     private ParseUser userName;
     private Post posts;
+    private Button btnAddFriend;
 
     public UserFeedFragment() {
 
@@ -72,6 +74,7 @@ public class UserFeedFragment extends Fragment {
         tvProfileName = view.findViewById(R.id.tvProfileName);
         ivPicProfile = view.findViewById(R.id.ivPicProfile);
         rvProfileFeed =view.findViewById(R.id.rvProfileFeed);
+        btnAddFriend = view.findViewById(R.id.btnAddFriend);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -113,6 +116,19 @@ public class UserFeedFragment extends Fragment {
                 }
                 profilePosts.addAll(posts);
                 adapter.notifyDataSetChanged();
+            }
+        });
+
+        btnAddFriend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ParseUser user = ParseUser.getCurrentUser();
+                List<String> userName = user.getList("friendsList");
+                System.out.print(userName);
+                if (!user.getList("friendsList").contains(posts.getUser().getUsername())) {
+                    user.addUnique("friendsList", posts.getUser().getUsername());
+                    user.saveInBackground();
+                }
             }
         });
     }
