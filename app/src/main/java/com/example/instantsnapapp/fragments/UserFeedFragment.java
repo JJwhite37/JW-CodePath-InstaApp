@@ -81,6 +81,21 @@ public class UserFeedFragment extends Fragment {
             posts = bundle.getParcelable("Post");
         }
 
+        ParseUser user = ParseUser.getCurrentUser();
+        List<ParseUser> friendList = user.getList("friendsList");
+        if(friendList.get(0) != null) {
+            for (int i = 0; i < friendList.size(); i++) {
+                try {
+                    if (friendList.get(i).fetchIfNeeded().getString("username").equals(posts.getUser().getUsername())) {
+                        btnAddFriend.setText("Already Friends");
+                        break;
+                    }
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
 
         profilePosts = new ArrayList<>();
         adapter = new ProfileAdapter(getContext(), profilePosts);
@@ -123,11 +138,10 @@ public class UserFeedFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 ParseUser user = ParseUser.getCurrentUser();
-                List<String> userName = user.getList("friendsList");
-                System.out.print(userName);
-                if (!user.getList("friendsList").contains(posts.getUser().getUsername())) {
-                    user.addUnique("friendsList", posts.getUser().getUsername());
+                if (!user.getList("friendsList").contains(posts.getUser())) {
+                    user.addUnique("friendsList", posts.getUser());
                     user.saveInBackground();
+                    btnAddFriend.setText("Already Friends");
                 }
             }
         });
