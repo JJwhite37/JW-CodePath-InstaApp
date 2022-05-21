@@ -22,13 +22,18 @@
         <entry key="..\:/Users/Spets/Documents/GitHub/InstantSnapApp/app/src/main/res/menu/menu_bottom_navigation.xml" value="0.20104166666666667" />
         <entry key="..\:/Users/Spets/Documents/GitHub/InstantSnapApp/app/src/main/res/menu/menu_main.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/Spets/Documents/GitHub/InstantSnapApp/app/src/main/res/xml/fileprovider.xml" value="0.14479166666666668" />
+        <entry key="..\:/Users/Spets/Documents/GitHub/JW-CodePath-InstaApp/app/src/main/res/drawable/menu_friends.xml" value="0.286" />
+        <entry key="..\:/Users/Spets/Documents/GitHub/JW-CodePath-InstaApp/app/src/main/res/drawable/menu_profile.xml" value="0.286" />
         <entry key="..\:/Users/Spets/Documents/GitHub/JW-CodePath-InstaApp/app/src/main/res/layout/activity_login.xml" value="0.32563405797101447" />
+        <entry key="..\:/Users/Spets/Documents/GitHub/JW-CodePath-InstaApp/app/src/main/res/layout/activity_main.xml" value="0.32563405797101447" />
         <entry key="..\:/Users/Spets/Documents/GitHub/JW-CodePath-InstaApp/app/src/main/res/layout/fragment_detail.xml" value="0.5" />
         <entry key="..\:/Users/Spets/Documents/GitHub/JW-CodePath-InstaApp/app/src/main/res/layout/fragment_feed.xml" value="0.32563405797101447" />
         <entry key="..\:/Users/Spets/Documents/GitHub/JW-CodePath-InstaApp/app/src/main/res/layout/fragment_friends_list.xml" value="0.32563405797101447" />
         <entry key="..\:/Users/Spets/Documents/GitHub/JW-CodePath-InstaApp/app/src/main/res/layout/fragment_profile.xml" value="0.32563405797101447" />
         <entry key="..\:/Users/Spets/Documents/GitHub/JW-CodePath-InstaApp/app/src/main/res/layout/fragment_user_feed.xml" value="0.33" />
         <entry key="..\:/Users/Spets/Documents/GitHub/JW-CodePath-InstaApp/app/src/main/res/layout/item_friend.xml" value="0.32563405797101447" />
+        <entry key="..\:/Users/Spets/Documents/GitHub/JW-CodePath-InstaApp/app/src/main/res/menu/menu_bottom_navigation.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/Spets/Documents/GitHub/JW-CodePath-InstaApp/app/src/main/res/menu/menu_main.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>

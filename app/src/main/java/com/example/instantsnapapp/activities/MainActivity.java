@@ -24,6 +24,7 @@ import android.widget.Toast;
 import com.example.instantsnapapp.R;
 import com.example.instantsnapapp.adapters.FeedAdapter;
 import com.example.instantsnapapp.fragments.FeedFragment;
+import com.example.instantsnapapp.fragments.FriendsListFragment;
 import com.example.instantsnapapp.fragments.PostFragment;
 import com.example.instantsnapapp.fragments.ProfileFragment;
 import com.example.instantsnapapp.models.Post;
@@ -66,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.bnProfile:
                         fragment = new ProfileFragment();
+                        break;
+                    case R.id.bnFriendList:
+                        fragment = new FriendsListFragment();
                         break;
                     default:
                         fragment = new FeedFragment();

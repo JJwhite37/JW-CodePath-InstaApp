@@ -30,7 +30,6 @@ import com.bumptech.glide.Glide;
 import com.example.instantsnapapp.R;
 import com.example.instantsnapapp.adapters.ProfileAdapter;
 import com.example.instantsnapapp.models.Post;
-import com.example.instantsnapapp.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;

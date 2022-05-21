@@ -23,4 +23,11 @@
         android:title="Profile"
         android:visible="true"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/bnFriendList"
+        android:enabled="true"
+        android:icon="@drawable/menu_friends"
+        android:title="FriendList"
+        android:visible="true"
+        app:showAsAction="always" />
 </menu>
