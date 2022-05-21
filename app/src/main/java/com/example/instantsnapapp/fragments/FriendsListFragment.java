@@ -58,7 +58,13 @@ public class FriendsListFragment extends Fragment {
     private void retrieveFriends() throws ParseException {
         ParseUser user = ParseUser.getCurrentUser();
         List<ParseUser> friendList = user.getList("friendsList");
-        Friends.addAll(User.fromFriendList(friendList));
-        adapter.notifyDataSetChanged();
+        System.out.print(friendList);
+        if(friendList.size() != 0) {
+            if (friendList.get(0) != null) {
+                Friends.addAll(User.fromFriendList(friendList));
+                adapter.notifyDataSetChanged();
+            }
+        }
     }
+
 }

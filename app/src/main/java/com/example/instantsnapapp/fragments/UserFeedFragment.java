@@ -82,15 +82,17 @@ public class UserFeedFragment extends Fragment {
 
         ParseUser user = ParseUser.getCurrentUser();
         List<ParseUser> friendList = user.getList("friendsList");
-        if(friendList.get(0) != null) {
-            for (int i = 0; i < friendList.size(); i++) {
-                try {
-                    if (friendList.get(i).fetchIfNeeded().getString("username").equals(posts.getUser().getUsername())) {
-                        btnAddFriend.setText("Already Friends");
-                        break;
+        if(friendList.size() != 0) {
+            if (friendList.get(0) != null) {
+                for (int i = 0; i < friendList.size(); i++) {
+                    try {
+                        if (friendList.get(i).fetchIfNeeded().getString("username").equals(posts.getUser().getUsername())) {
+                            btnAddFriend.setText("Already Friends");
+                            break;
+                        }
+                    } catch (ParseException e) {
+                        e.printStackTrace();
                     }
-                } catch (ParseException e) {
-                    e.printStackTrace();
                 }
             }
         }
