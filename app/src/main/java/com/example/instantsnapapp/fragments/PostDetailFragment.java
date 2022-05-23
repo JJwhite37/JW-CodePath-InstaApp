@@ -36,6 +36,7 @@ public class PostDetailFragment extends Fragment {
     private ImageView ivProfilePic;
     private ImageView ivPostPic;
     private ImageView ivHeart;
+    private ImageView ivComment;
     private ParseUser userName;
     private Post posts;
     private int likeCount;
@@ -60,6 +61,7 @@ public class PostDetailFragment extends Fragment {
         ivProfilePic = view.findViewById(R.id.ivProfilePic);
         ivPostPic = view.findViewById(R.id.ivPostPic);
         ivHeart = view.findViewById(R.id.ivHeart);
+        ivComment = view.findViewById(R.id.ivComment);
 
 
         Bundle bundle = this.getArguments();
@@ -106,7 +108,14 @@ public class PostDetailFragment extends Fragment {
                 if (posts.getUser().getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
 
                 } else {
-
+                    Fragment someFragment = new UserFeedFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("Post", posts);
+                    someFragment.setArguments(bundle);
+                    FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                    transaction.replace(R.id.flContainer, someFragment );
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                 }
             }
         });
@@ -121,6 +130,20 @@ public class PostDetailFragment extends Fragment {
                     likeCount++;
                     tvCount.setText(String.valueOf(likeCount));
                 }
+            }
+        });
+
+        ivComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment someFragment = new CommentFragment();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("Post", posts);
+                someFragment.setArguments(bundle);
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.flContainer, someFragment );
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 
