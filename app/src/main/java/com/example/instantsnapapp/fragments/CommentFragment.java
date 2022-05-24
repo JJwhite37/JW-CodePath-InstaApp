@@ -12,19 +12,31 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.instantsnapapp.R;
+import com.example.instantsnapapp.adapters.CommentAdapter;
+import com.example.instantsnapapp.models.Comment;
 import com.example.instantsnapapp.models.Post;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CommentFragment extends Fragment {
     public static final String TAG = "CommentFragment";
     private Post posts;
     private Button btnPost;
     private EditText etComment;
+    private List<Comment> allComments;
+    private RecyclerView rvComments;
+    private CommentAdapter commentAdapter;
 
     // add in loading bar.
     public CommentFragment() {
@@ -44,11 +56,19 @@ public class CommentFragment extends Fragment {
 
         btnPost= view.findViewById(R.id.btnPost);
         etComment= view.findViewById(R.id.etComment);
+        rvComments = view.findViewById(R.id.rvComments);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             posts = bundle.getParcelable("Post");
         }
+
+        allComments = new ArrayList<>();
+        commentAdapter = new CommentAdapter(getContext(), allComments);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        rvComments.setLayoutManager(linearLayoutManager);
+        rvComments.setAdapter(commentAdapter);
+        retrieveComments();
 
         btnPost.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,8 +86,29 @@ public class CommentFragment extends Fragment {
             }
         });
     }
+    private void retrieveComments() {
+        ParseQuery<Comment> query = ParseQuery.getQuery(Comment.class);
+        query.whereEqualTo("post", posts);
+        query.orderByAscending("createdAt");
+        query.include("user");
+        query.include("comment");
+        query.include("post");
+        query.findInBackground(new FindCallback<Comment>() {
+            @Override
+            public void done(List<Comment> comments, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error during query", e);
+                    return;
+                }
+                allComments.addAll(comments);
+                commentAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
     private void saveComment(ParseUser user, Post posts, String comment){
-        ParseObject newComment = new ParseObject("Comment");
+
+        ParseObject newComment = ParseObject.create("Comment");
         newComment.put("comment",comment);
         newComment.put("post",posts);
         newComment.put("user",user);
@@ -80,14 +121,9 @@ public class CommentFragment extends Fragment {
                 }
                 Log.i(TAG, "Comment was a success");
                 Toast.makeText(getContext(), "Comment was successful", Toast.LENGTH_SHORT).show();
-                Fragment someFragment = new PostDetailFragment();
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("Post", posts);
-                someFragment.setArguments(bundle);
-                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-                transaction.replace(R.id.flContainer, someFragment );
-                transaction.addToBackStack(null);
-                transaction.commit();
+                allComments.clear();
+                commentAdapter.notifyDataSetChanged();
+                retrieveComments();
             }
         });
     }

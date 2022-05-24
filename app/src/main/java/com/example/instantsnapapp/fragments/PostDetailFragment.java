@@ -2,6 +2,7 @@ package com.example.instantsnapapp.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,14 +17,22 @@ import androidx.core.app.ActivityOptionsCompat;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.instantsnapapp.R;
+import com.example.instantsnapapp.adapters.CommentAdapter;
+import com.example.instantsnapapp.adapters.FeedAdapter;
+import com.example.instantsnapapp.models.Comment;
 import com.example.instantsnapapp.models.Post;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -64,6 +73,7 @@ public class PostDetailFragment extends Fragment {
         ivComment = view.findViewById(R.id.ivComment);
 
 
+
         Bundle bundle = this.getArguments();
         if (bundle != null) {
             posts = bundle.getParcelable("Post");
@@ -83,6 +93,7 @@ public class PostDetailFragment extends Fragment {
                 .into(ivPostPic);
 
         userName = posts.getUser();
+
 
         tvUserName.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,4 +159,6 @@ public class PostDetailFragment extends Fragment {
         });
 
     }
+
+
 }

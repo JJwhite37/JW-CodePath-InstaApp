@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:padding="4dp">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tfComment"
@@ -11,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginStart="3dp"
-        android:layout_marginTop="140dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="3dp"
         android:layout_marginBottom="3dp"
         android:padding="5dp"
@@ -31,7 +32,7 @@
             android:gravity="start|top"
             android:hint="Type your comment here"
             android:inputType="textMultiLine"
-            android:minLines="12"
+            android:minLines="2"
             android:padding="10dp"
             tools:text="hello" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -42,7 +43,14 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tfComment"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="15dp"
         android:text="Post" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvComments"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/btnPost"
+        android:layout_marginTop="15dp" />
 
 </RelativeLayout>

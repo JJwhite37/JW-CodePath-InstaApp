@@ -44,8 +44,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivProfilePic"
         android:layout_marginTop="3dp"
-        tools:srcCompat="@tools:sample/avatars"
-        android:transitionName="post"/>
+        android:transitionName="post"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/ivHeart"

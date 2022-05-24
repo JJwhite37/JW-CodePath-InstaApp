@@ -15,6 +15,7 @@ public class Post extends ParseObject {
     public static final String KEY_USER ="user";
     public static final String KEY_CREATEDAT= "createdAt";
     public static final String KEY_LIKELIST="userLiked";
+    public static final String KEY_ID="objectId";
 
     public Post() {
     }
@@ -45,6 +46,9 @@ public class Post extends ParseObject {
     }
     public void setLikedList(List<String> likedList){
         put(KEY_LIKELIST, likedList);
+    }
+    public String getPostId() {
+        return getString(KEY_ID);
     }
 
 
