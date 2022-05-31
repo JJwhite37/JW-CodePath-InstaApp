@@ -17,6 +17,8 @@ import com.example.instantsnapapp.models.User;
 
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
+
 public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder>{
     public static final String TAG = "FriendAdapter";
     private final Context context;
@@ -80,6 +82,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
             tvfriendName.setText(users.userName);
             Glide.with(context)
                     .load(users.profilePicUrl)
+                    .transform(new CropCircleTransformation())
                     .into(ivFriendPic);
         }
     }
