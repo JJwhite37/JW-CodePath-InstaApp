@@ -37,6 +37,7 @@ public class CommentFragment extends Fragment {
     private List<Comment> allComments;
     private RecyclerView rvComments;
     private CommentAdapter commentAdapter;
+    private ProgressBar pbComment;
 
     // add in loading bar.
     public CommentFragment() {
@@ -57,6 +58,7 @@ public class CommentFragment extends Fragment {
         btnPost= view.findViewById(R.id.btnPost);
         etComment= view.findViewById(R.id.etComment);
         rvComments = view.findViewById(R.id.rvComments);
+        pbComment = view.findViewById(R.id.pbComment);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -73,6 +75,7 @@ public class CommentFragment extends Fragment {
         btnPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                pbComment.setVisibility(ProgressBar.VISIBLE);
                 String comment = etComment.getText().toString();
 
                 if (comment.isEmpty()) {
@@ -120,9 +123,11 @@ public class CommentFragment extends Fragment {
                     return;
                 }
                 Log.i(TAG, "Comment was a success");
+                pbComment.setVisibility(ProgressBar.INVISIBLE);
                 Toast.makeText(getContext(), "Comment was successful", Toast.LENGTH_SHORT).show();
                 allComments.clear();
                 commentAdapter.notifyDataSetChanged();
+                etComment.setText("");
                 retrieveComments();
             }
         });

@@ -24,6 +24,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="4dp"
         android:layout_toEndOf="@+id/ivCommentPic"
+        android:textSize="20sp"
         tools:text="Name Here" />
 
     <TextView
@@ -34,5 +35,6 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="6dp"
         android:layout_toEndOf="@+id/ivCommentPic"
+        android:textSize="16sp"
         tools:text="Cool photo." />
 </RelativeLayout>

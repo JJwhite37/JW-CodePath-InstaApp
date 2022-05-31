@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/ivProfilePic"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
@@ -22,20 +22,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/ivProfilePic"
-        android:text="TextView"
-        android:transitionName="userName" />
+        android:textSize="20sp"
+        android:transitionName="userName"
+        tools:text="James" />
 
     <ImageView
         android:id="@+id/ivDots"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="240dp"
+        android:layout_marginStart="380dp"
         android:layout_marginTop="16dp"
-        android:layout_toEndOf="@+id/tvUserName"
         app:srcCompat="@drawable/media_option_button" />
 
     <ImageView
