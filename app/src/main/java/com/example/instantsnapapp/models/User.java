@@ -6,13 +6,17 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+import org.parceler.Parcel;
+
 import java.util.ArrayList;
 import java.util.List;
 
+@Parcel
 public class User{
 
     public String userName;
     public String profilePicUrl;
+    public ParseUser userId;
 
     public User(){
 
@@ -21,6 +25,7 @@ public class User{
     public static User fromFriend(ParseUser friend) throws ParseException {
         User user = new User();
 
+        user.userId = friend.fetchIfNeeded().getParseUser("objectId");
         user.userName = friend.fetchIfNeeded().getString("username");
         user.profilePicUrl = friend.fetchIfNeeded().getParseFile("profilePic").getUrl();
 

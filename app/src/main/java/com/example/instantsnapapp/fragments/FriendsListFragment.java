@@ -1,11 +1,13 @@
 package com.example.instantsnapapp.fragments;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,13 +20,15 @@ import com.example.instantsnapapp.models.User;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
+import org.parceler.Parcels;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class FriendsListFragment extends Fragment {
     public static final String TAG = "FriendsListFragment";
     private RecyclerView rvFriendList;
-    private List<User> Friends;
+    private List<User> friends;
     private FriendAdapter adapter;
 
     public FriendsListFragment() {
@@ -42,8 +46,8 @@ public class FriendsListFragment extends Fragment {
         
         rvFriendList = view.findViewById(R.id.rvFriendList);
 
-        Friends = new ArrayList<>();
-        adapter = new FriendAdapter(getContext(), Friends);
+        friends = new ArrayList<>();
+        adapter = new FriendAdapter(getContext(), friends);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         rvFriendList.setLayoutManager(linearLayoutManager);
         rvFriendList.setAdapter(adapter);
@@ -53,6 +57,27 @@ public class FriendsListFragment extends Fragment {
             e.printStackTrace();
         }
 
+        adapter.setOnItemClickListener(new FriendAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                //ivPostPic = itemView.findViewById(R.id.ivPostPic);
+                //tvUserName = itemView.findViewById(R.id.tvUserName);
+                //ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
+
+                Fragment someFragment = new UserFeedFragment();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("User", Parcels.wrap(friends.get(position)));
+                someFragment.setArguments(bundle);
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.flContainer, someFragment );
+                transaction.addToBackStack(null);
+                transaction.commit();
+
+
+
+            }
+        });
+
     }
 
     private void retrieveFriends() throws ParseException {
@@ -61,7 +86,7 @@ public class FriendsListFragment extends Fragment {
         System.out.print(friendList);
         if(friendList.size() != 0) {
             if (friendList.get(0) != null) {
-                Friends.addAll(User.fromFriendList(friendList));
+                friends.addAll(User.fromFriendList(friendList));
                 adapter.notifyDataSetChanged();
             }
         }

@@ -13,7 +13,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="1dp"
-        app:srcCompat="@drawable/nav_logo_whiteout" />
+        app:srcCompat="@drawable/instantsnaplogo" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/scFeed"

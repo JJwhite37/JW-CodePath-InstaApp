@@ -30,12 +30,15 @@ import com.bumptech.glide.Glide;
 import com.example.instantsnapapp.R;
 import com.example.instantsnapapp.adapters.ProfileAdapter;
 import com.example.instantsnapapp.models.Post;
+import com.example.instantsnapapp.models.User;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+
+import org.parceler.Parcels;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -53,7 +56,11 @@ public class UserFeedFragment extends Fragment {
     private ParseUser currentUser = ParseUser.getCurrentUser();
     private ParseUser userName;
     private Post posts;
+    private User user;
     private Button btnAddFriend;
+    public String profileUserName;
+    public String profilePicUrl;
+    private ParseUser profileUser;
 
     public UserFeedFragment() {
 
@@ -76,8 +83,17 @@ public class UserFeedFragment extends Fragment {
         btnAddFriend = view.findViewById(R.id.btnAddFriend);
 
         Bundle bundle = this.getArguments();
-        if (bundle != null) {
+        if (bundle.getParcelable("Post") != null) {
             posts = bundle.getParcelable("Post");
+            profileUserName = posts.getUser().getUsername();
+            profilePicUrl = posts.getUser().getParseFile("profilePic").getUrl();
+            profileUser = posts.getUser();
+        }
+        else if (bundle.getParcelable("User") != null) {
+            user = Parcels.unwrap(bundle.getParcelable("User"));
+            profileUserName = user.userName;
+            profilePicUrl = user.profilePicUrl;
+            profileUser = user.userId;
         }
 
         ParseUser user = ParseUser.getCurrentUser();
@@ -86,7 +102,7 @@ public class UserFeedFragment extends Fragment {
             if (friendList.get(0) != null) {
                 for (int i = 0; i < friendList.size(); i++) {
                     try {
-                        if (friendList.get(i).fetchIfNeeded().getString("username").equals(posts.getUser().getUsername())) {
+                        if (friendList.get(i).fetchIfNeeded().getString("username").equals(profileUserName)) {
                             btnAddFriend.setText("Already Friends");
                             break;
                         }
@@ -97,7 +113,6 @@ public class UserFeedFragment extends Fragment {
             }
         }
 
-
         profilePosts = new ArrayList<>();
         adapter = new ProfileAdapter(getContext(), profilePosts);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
@@ -106,12 +121,10 @@ public class UserFeedFragment extends Fragment {
 
         //Post posts = getIntent().getParcelableExtra("Posts");
 
-        tvProfileName.setText(posts.getUser().getUsername());
-        userName = posts.getUser();
-
+        tvProfileName.setText(profileUserName);
 
         Glide.with(getContext())
-                .load(posts.getUser().getParseFile("profilePic").getUrl())
+                .load(profilePicUrl)
                 .transform(new CropCircleTransformation())
                 .into(ivPicProfile);
 
@@ -120,7 +133,7 @@ public class UserFeedFragment extends Fragment {
 
     private void retrieveProfileFeed() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.whereEqualTo("user", userName);
+        query.whereEqualTo("user", profileUser);
         query.orderByDescending("createdAt");
         query.include(Post.KEY_IMAGE);
         query.findInBackground(new FindCallback<Post>() {
@@ -139,8 +152,8 @@ public class UserFeedFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 ParseUser user = ParseUser.getCurrentUser();
-                if (!user.getList("friendsList").contains(posts.getUser())) {
-                    user.addUnique("friendsList", posts.getUser());
+                if (!user.getList("friendsList").contains(profileUser)) {
+                    user.addUnique("friendsList", profileUser);
                     user.saveInBackground();
                     btnAddFriend.setText("Already Friends");
                 }

@@ -83,9 +83,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivPostPic"
-        android:layout_marginStart="279dp"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="4dp"
-        android:layout_toEndOf="@+id/ivSend"
+        android:layout_marginEnd="7dp"
         app:srcCompat="@drawable/ufi_save_icon" />
 
     <TextView
