@@ -23,11 +23,13 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.instantsnapapp.R;
+import com.example.instantsnapapp.adapters.FeedAdapter;
 import com.example.instantsnapapp.adapters.ProfileAdapter;
 import com.example.instantsnapapp.models.Post;
 import com.example.instantsnapapp.models.User;
@@ -129,6 +131,20 @@ public class UserFeedFragment extends Fragment {
                 .into(ivPicProfile);
 
         retrieveProfileFeed();
+
+        adapter.setOnItemClickListener(new FeedAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                Fragment someFragment = new PostDetailFragment();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("Post", profilePosts.get(position));
+                someFragment.setArguments(bundle);
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.flContainer, someFragment );
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
     }
 
     private void retrieveProfileFeed() {

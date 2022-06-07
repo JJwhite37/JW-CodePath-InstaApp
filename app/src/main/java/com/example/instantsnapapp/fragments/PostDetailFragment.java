@@ -83,7 +83,11 @@ public class PostDetailFragment extends Fragment {
         likeCount = posts.getLikedList().size();
         tvCount.setText(String.valueOf(likeCount));
 
-        tvUserName.setText(posts.getUser().getUsername());
+        try {
+            tvUserName.setText(posts.getUser().fetchIfNeeded().getUsername());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         tvPostDesc.setText(posts.getDescription());
         Glide.with(getContext())
                 .load(posts.getUser().getParseFile("profilePic").getUrl())
