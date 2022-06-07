@@ -25,7 +25,7 @@ public class User{
     public static User fromFriend(ParseUser friend) throws ParseException {
         User user = new User();
 
-        user.userId = friend.fetchIfNeeded().getParseUser("objectId");
+        user.userId = friend;
         user.userName = friend.fetchIfNeeded().getString("username");
         user.profilePicUrl = friend.fetchIfNeeded().getParseFile("profilePic").getUrl();
 

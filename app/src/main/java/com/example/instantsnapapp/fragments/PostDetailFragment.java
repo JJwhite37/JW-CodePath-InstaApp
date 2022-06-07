@@ -46,7 +46,8 @@ public class PostDetailFragment extends Fragment {
     private ImageView ivPostPic;
     private ImageView ivHeart;
     private ImageView ivComment;
-    private ParseUser userName;
+    private ParseUser postUser;
+    private ParseUser curUser;
     private Post posts;
     private int likeCount;
     private List<String> likedList;
@@ -64,6 +65,8 @@ public class PostDetailFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        curUser = ParseUser.getCurrentUser();
+
         tvUserName = view.findViewById(R.id.tvUserName);
         tvPostDesc = view.findViewById(R.id.tvPostDesc);
         tvCount = view.findViewById(R.id.tvCount);
@@ -71,8 +74,6 @@ public class PostDetailFragment extends Fragment {
         ivPostPic = view.findViewById(R.id.ivPostPic);
         ivHeart = view.findViewById(R.id.ivHeart);
         ivComment = view.findViewById(R.id.ivComment);
-
-
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -92,14 +93,21 @@ public class PostDetailFragment extends Fragment {
                 .load(posts.getImage().getUrl())
                 .into(ivPostPic);
 
-        userName = posts.getUser();
+        postUser = posts.getUser();
 
+        if (posts.getLikedList().contains(curUser.getUsername())) {
+            ivHeart.setImageResource(R.drawable.ufi_heart_active);
+        }
 
         tvUserName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (posts.getUser().getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
-
+                    Fragment someFragment = new ProfileFragment();
+                    FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                    transaction.replace(R.id.flContainer, someFragment );
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                 } else {
                     Fragment someFragment = new UserFeedFragment();
                     Bundle bundle = new Bundle();
@@ -117,7 +125,11 @@ public class PostDetailFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 if (posts.getUser().getUsername().equals(ParseUser.getCurrentUser().getUsername())) {
-
+                    Fragment someFragment = new ProfileFragment();
+                    FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                    transaction.replace(R.id.flContainer, someFragment );
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                 } else {
                     Fragment someFragment = new UserFeedFragment();
                     Bundle bundle = new Bundle();
@@ -134,12 +146,12 @@ public class PostDetailFragment extends Fragment {
         ivHeart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ParseUser user = ParseUser.getCurrentUser();
-                if (!posts.getLikedList().contains(user.getUsername())) {
-                    posts.addUnique("userLiked", user.getUsername());
+                if (!posts.getLikedList().contains(curUser.getUsername())) {
+                    posts.addUnique("userLiked", curUser.getUsername());
                     posts.saveInBackground();
                     likeCount++;
                     tvCount.setText(String.valueOf(likeCount));
+                    ivHeart.setImageResource(R.drawable.ufi_heart_active);
                 }
             }
         });

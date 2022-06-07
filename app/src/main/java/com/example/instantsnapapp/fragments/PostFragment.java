@@ -8,13 +8,21 @@ import com.parse.ParseFile;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.ImageDecoder;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.OpenableColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,22 +34,30 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
 import java.io.File;
+import java.io.IOException;
 
 public class PostFragment extends Fragment {
     public static final String TAG = "PostActivity";
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 87;
+    public static final int PICK_IMAGE_REQUEST_CODE = 71;
     public String photoFileName = "photo.jpg";
     private Button btnSnap;
     private Button btnPost;
+    private Button btnUpload;
     private ImageView ivPicturePost;
     private EditText etCaption;
-    private Boolean snapBool = false;
     private File photoFile;
     private ProgressBar pbPost;
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
 
     public PostFragment() {
 
@@ -62,6 +78,9 @@ public class PostFragment extends Fragment {
         ivPicturePost = view.findViewById(R.id.ivPicturePost);
         etCaption = view.findViewById(R.id.etCaption);
         pbPost = view.findViewById(R.id.pbPost);
+        btnUpload = view.findViewById(R.id.btnUpload);
+
+
 
 
         btnPost.setOnClickListener(new View.OnClickListener() {
@@ -85,8 +104,15 @@ public class PostFragment extends Fragment {
         btnSnap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                snapBool = true;
                 launchCamera();
+            }
+        });
+
+        btnUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                verifyStoragePermissions(getActivity());
+                launchFileUpload(view);
             }
         });
     }
@@ -127,6 +153,40 @@ public class PostFragment extends Fragment {
         return file;
     }
 
+
+    // Trigger gallery selection for a photo
+    public void launchFileUpload(View view) {
+        // Create intent for picking a photo from the gallery
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        // If you call startActivityForResult() using an intent that no app can handle, your app will crash.
+        // So as long as the result is not null, it's safe to use the intent.
+        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+            // Bring up gallery to select a photo
+            startActivityForResult(intent, PICK_IMAGE_REQUEST_CODE);
+        }
+    }
+
+    public Bitmap loadFromUri(Uri photoUri) {
+        Bitmap image = null;
+        try {
+            // check version of Android on device
+            if(Build.VERSION.SDK_INT > 27){
+                // on newer versions of Android, use the new decodeBitmap method
+                ImageDecoder.Source source = ImageDecoder.createSource(getActivity().getContentResolver(), photoUri);
+                image = ImageDecoder.decodeBitmap(source);
+            } else {
+                // support older versions of Android by using getBitmap
+                image = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), photoUri);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
+    }
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -141,26 +201,65 @@ public class PostFragment extends Fragment {
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }
+        if(requestCode == PICK_IMAGE_REQUEST_CODE) {
+            if(resultCode == RESULT_OK) {
+                Uri photoUri = data.getData();
+                Cursor returnCursor = getActivity().getContentResolver().query(photoUri, null, null, null, null);
+                int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                returnCursor.moveToFirst();
+                photoFileName = returnCursor.getString(nameIndex);
+                photoFile = new File("/sdcard/Download/" + photoFileName);
+
+                // Load the image located at photoUri into selectedImage
+                Bitmap selectedImage = loadFromUri(photoUri);
+
+                // Load the selected image into a preview
+                ivPicturePost.setImageBitmap(selectedImage);
+            }
+        }
     }
 
     private void savePost(String description, ParseUser currentUser, File photoFile){
         Post post = new Post();
         post.setDescription(description);
         post.setUser(currentUser);
-        post.setImage(new ParseFile(photoFile));
-        post.saveInBackground(new SaveCallback() {
+        ParseFile photo = new ParseFile(photoFile);
+        photo.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if (e != null) {
                     Log.e(TAG, "Error during Post", e);
                     return;
                 }
-                Log.i(TAG, "Post was a success");
-                Toast.makeText(getContext(), "Post was successful", Toast.LENGTH_SHORT).show();
-                pbPost.setVisibility(ProgressBar.INVISIBLE);
-                ivPicturePost.setImageResource(0);
-                etCaption.setText("");
+                post.setImage(photo);
+                post.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if (e != null) {
+                            Log.e(TAG, "Error during Post", e);
+                            return;
+                        }
+                        Log.i(TAG, "Post was a success");
+                        Toast.makeText(getContext(), "Post was successful", Toast.LENGTH_SHORT).show();
+                        pbPost.setVisibility(ProgressBar.INVISIBLE);
+                        ivPicturePost.setImageResource(0);
+                        etCaption.setText("");
+                    }
+                });
             }
         });
+    }
+    public static void verifyStoragePermissions(Activity activity) {
+        // Check if we have write permission
+        int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
     }
 }

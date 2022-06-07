@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -38,6 +39,7 @@ public class CommentFragment extends Fragment {
     private RecyclerView rvComments;
     private CommentAdapter commentAdapter;
     private ProgressBar pbComment;
+    private TextView tvCommentTitle;
 
     // add in loading bar.
     public CommentFragment() {
@@ -59,6 +61,7 @@ public class CommentFragment extends Fragment {
         etComment= view.findViewById(R.id.etComment);
         rvComments = view.findViewById(R.id.rvComments);
         pbComment = view.findViewById(R.id.pbComment);
+        tvCommentTitle = view.findViewById(R.id.tvCommentTitle);
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -104,6 +107,8 @@ public class CommentFragment extends Fragment {
                     return;
                 }
                 allComments.addAll(comments);
+                int commentCount = allComments.size();
+                tvCommentTitle.setText(String.valueOf(commentCount) + " Comments:");
                 commentAdapter.notifyDataSetChanged();
             }
         });
