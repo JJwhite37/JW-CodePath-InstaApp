@@ -1,4 +1,4 @@
-#InstaSnap
+# InstaSnap
 
 InstaSnap is a photo sharing app similar to Instagram.
 
