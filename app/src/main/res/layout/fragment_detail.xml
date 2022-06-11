@@ -1,32 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:padding="7dp">
 
     <ImageView
         android:id="@+id/ivProfilePic"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="0dp"
-        tools:srcCompat="@tools:sample/avatars"
-        android:transitionName="pic"/>
+        android:transitionName="pic"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/tvUserName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="18dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="5dp"
         android:layout_toEndOf="@+id/ivProfilePic"
         android:text="TextView"
-        android:transitionName="userName"/>
+        android:textColor="@color/textPrimary"
+        android:textSize="20sp"
+        android:transitionName="userName" />
 
     <ImageView
         android:id="@+id/ivDots"
@@ -44,8 +46,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/ivProfilePic"
         android:layout_marginTop="3dp"
-        tools:srcCompat="@tools:sample/avatars"
-        android:transitionName="post"/>
+        android:transitionName="post"
+        tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/ivHeart"
@@ -64,37 +66,31 @@
         android:layout_below="@+id/ivPostPic"
         android:layout_marginStart="7dp"
         android:layout_marginTop="4dp"
-        android:layout_toEndOf="@+id/ivHeart"
+        android:layout_toEndOf="@+id/tvCount"
         app:srcCompat="@drawable/ufi_comment" />
-
-    <ImageView
-        android:id="@+id/ivSend"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ivPostPic"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="4dp"
-        android:layout_toEndOf="@+id/ivComment"
-        app:srcCompat="@drawable/direct" />
-
-    <ImageView
-        android:id="@+id/ivSave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ivPostPic"
-        android:layout_marginStart="279dp"
-        android:layout_marginTop="4dp"
-        android:layout_toEndOf="@+id/ivSend"
-        app:srcCompat="@drawable/ufi_save_icon" />
 
     <TextView
         android:id="@+id/tvPostDesc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ivSend"
+        android:layout_below="@+id/ivComment"
         android:layout_alignParentStart="true"
         android:layout_marginStart="5dp"
         android:layout_marginTop="5dp"
-        android:text="TextView" />
+        android:textColor="@color/textSecondary"
+        android:textSize="16sp"
+        tools:text="hello world" />
+
+    <TextView
+        android:id="@+id/tvCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivPostPic"
+        android:layout_marginStart="3dp"
+        android:layout_marginTop="6dp"
+        android:layout_toEndOf="@+id/ivHeart"
+        android:textColor="@color/textPrimary"
+        android:textStyle="bold"
+        tools:text="0" />
 
 </RelativeLayout>

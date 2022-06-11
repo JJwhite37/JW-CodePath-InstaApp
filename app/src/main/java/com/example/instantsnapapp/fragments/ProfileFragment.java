@@ -11,12 +11,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.instantsnapapp.R;
 import com.example.instantsnapapp.activities.LoginActivity;
+import com.example.instantsnapapp.adapters.FeedAdapter;
 import com.example.instantsnapapp.adapters.ProfileAdapter;
 import com.example.instantsnapapp.models.Post;
 import com.parse.FindCallback;
@@ -37,7 +39,7 @@ public class ProfileFragment extends Fragment {
     private TextView tvProfileName;
     private List<Post> profilePosts;
     private ProfileAdapter adapter;
-    private ParseUser currentUser = ParseUser.getCurrentUser();
+    private final ParseUser currentUser = ParseUser.getCurrentUser();
 
     public ProfileFragment() {
 
@@ -65,6 +67,20 @@ public class ProfileFragment extends Fragment {
         rvProfile.setAdapter(adapter);
         retrieveProfileFeed();
 
+        adapter.setOnItemClickListener(new FeedAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View itemView, int position) {
+                Fragment someFragment = new PostDetailFragment();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("Post", profilePosts.get(position));
+                someFragment.setArguments(bundle);
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.flContainer, someFragment );
+                transaction.addToBackStack(null);
+                transaction.commit();
+            }
+        });
+
         tvProfileName.setText(currentUser.getUsername());
 
         Glide.with(getContext())
@@ -77,9 +93,19 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 ParseUser.logOut();
-                //ParseUser currentUser = ParseUser.getCurrentUser();
                 Intent i = new Intent(getContext(), LoginActivity.class);
                 startActivity(i);
+            }
+        });
+
+        ivPicProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment someFragment = new ProfilePicFragment();
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.flContainer, someFragment );
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
     }

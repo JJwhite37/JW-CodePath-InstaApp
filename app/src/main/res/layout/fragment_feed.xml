@@ -10,11 +10,10 @@
         android:id="@+id/ivLogo"
         android:layout_width="197dp"
         android:layout_height="49dp"
-        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="85dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="1dp"
-        app:srcCompat="@drawable/nav_logo_whiteout" />
+        app:srcCompat="@drawable/instantsnaplogo" />
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/scFeed"

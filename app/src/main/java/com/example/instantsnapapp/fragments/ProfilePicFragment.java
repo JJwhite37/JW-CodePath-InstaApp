@@ -1,8 +1,8 @@
 package com.example.instantsnapapp.fragments;
 import static android.app.Activity.RESULT_OK;
 
+import com.bumptech.glide.Glide;
 import com.example.instantsnapapp.R;
-import com.example.instantsnapapp.models.Post;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -27,7 +27,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -36,12 +35,13 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import java.io.File;
 import java.io.IOException;
 
-public class PostFragment extends Fragment {
-    public static final String TAG = "PostActivity";
+public class ProfilePicFragment extends Fragment {
+    public static final String TAG = "ProfilePicFragment";
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 87;
     public static final int PICK_IMAGE_REQUEST_CODE = 71;
     public String photoFileName = "photo.jpg";
@@ -49,7 +49,6 @@ public class PostFragment extends Fragment {
     private Button btnPost;
     private Button btnUpload;
     private ImageView ivPicturePost;
-    private EditText etCaption;
     private File photoFile;
     private ProgressBar pbPost;
     private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -57,42 +56,41 @@ public class PostFragment extends Fragment {
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
+    private ParseUser currentUser;
 
-    public PostFragment() {
+    public ProfilePicFragment() {
 
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle saveInstanceState) {
-        return inflater.inflate(R.layout.fragment_post, container, false);
+        return inflater.inflate(R.layout.fragment_profile_pic, container, false);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        currentUser = ParseUser.getCurrentUser();
 
         btnSnap = view.findViewById(R.id.btnSnap);
         btnPost = view.findViewById(R.id.btnPost);
         ivPicturePost = view.findViewById(R.id.ivPicturePost);
-        etCaption = view.findViewById(R.id.etCaption);
         pbPost = view.findViewById(R.id.pbPost);
         btnUpload = view.findViewById(R.id.btnUpload);
+
+        Glide.with(getContext())
+                .load(currentUser.getParseFile("profilePic").getUrl())
+                .into(ivPicturePost);
 
         btnPost.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 pbPost.setVisibility(ProgressBar.VISIBLE);
-                String description = etCaption.getText().toString();
-                if (description.isEmpty()){
-                    Toast.makeText(getContext(), "Invalid post,No description.", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                else if (photoFile == null){
+                if (photoFile == null){
                     Toast.makeText(getContext(), "Invalid post,No Picture.", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                ParseUser curentUser = ParseUser.getCurrentUser();
-                savePost(description, curentUser, photoFile);
+                savePic(currentUser, photoFile);
             }
         });
 
@@ -112,14 +110,10 @@ public class PostFragment extends Fragment {
         });
     }
     private void launchCamera(){
-
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
         photoFile = getPhotoFileUri(photoFileName);
-
         Uri fileProvider = FileProvider.getUriForFile(getContext(), "com.codepath.fileprovider", photoFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
-
         if (intent.resolveActivity(getContext().getPackageManager()) != null) {
             startActivityForResult(intent, CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE);
         }
@@ -132,13 +126,10 @@ public class PostFragment extends Fragment {
             Log.d(TAG, "failed to create directory");
         }
 
-
         File file = new File(mediaStorageDir.getPath() + File.separator + fileName);
 
         return file;
     }
-
-
 
     public void launchFileUpload(View view) {
 
@@ -146,7 +137,6 @@ public class PostFragment extends Fragment {
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
         if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-
             startActivityForResult(intent, PICK_IMAGE_REQUEST_CODE);
         }
     }
@@ -170,16 +160,15 @@ public class PostFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        //if picture is taken with camera.
         if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+                ivPicturePost.setImageResource(0);
                 ivPicturePost.setImageBitmap(takenImage);
             } else {
                 Toast.makeText(getContext(), "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }
-        //if picture was selected from storage.
         if(requestCode == PICK_IMAGE_REQUEST_CODE) {
             if(resultCode == RESULT_OK) {
                 Uri photoUri = data.getData();
@@ -189,15 +178,13 @@ public class PostFragment extends Fragment {
                 photoFileName = returnCursor.getString(nameIndex);
                 photoFile = new File("/sdcard/Download/" + photoFileName);
                 Bitmap selectedImage = loadFromUri(photoUri);
+                ivPicturePost.setImageResource(0);
                 ivPicturePost.setImageBitmap(selectedImage);
             }
         }
     }
 
-    private void savePost(String description, ParseUser currentUser, File photoFile){
-        Post post = new Post();
-        post.setDescription(description);
-        post.setUser(currentUser);
+    private void savePic(ParseUser currentUser, File photoFile){
         ParseFile photo = new ParseFile(photoFile);
         photo.saveInBackground(new SaveCallback() {
             @Override
@@ -206,8 +193,8 @@ public class PostFragment extends Fragment {
                     Log.e(TAG, "Error during Post", e);
                     return;
                 }
-                post.setImage(photo);
-                post.saveInBackground(new SaveCallback() {
+                currentUser.put("profilePic",photo);
+                currentUser.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
                         if (e != null) {
@@ -215,10 +202,13 @@ public class PostFragment extends Fragment {
                             return;
                         }
                         Log.i(TAG, "Post was a success");
-                        Toast.makeText(getContext(), "Post was successful", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Picture updated", Toast.LENGTH_SHORT).show();
                         pbPost.setVisibility(ProgressBar.INVISIBLE);
-                        ivPicturePost.setImageResource(0);
-                        etCaption.setText("");
+                        Fragment someFragment = new ProfileFragment();
+                        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                        transaction.replace(R.id.flContainer, someFragment );
+                        transaction.addToBackStack(null);
+                        transaction.commit();
                     }
                 });
             }

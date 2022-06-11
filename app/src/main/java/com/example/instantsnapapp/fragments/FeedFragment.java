@@ -40,9 +40,6 @@ public class FeedFragment extends Fragment {
     private RecyclerView rvFeed;
     private FeedAdapter adapter;
     private List<Post> allPosts;
-    private TextView tvUserName;
-    private ImageView ivProfilePic;
-    private ImageView ivPostPic;
     private SwipeRefreshLayout scFeed;
     private EndlessRecyclerViewScrollListener scrollListener;
     private int skipNum = 1;
@@ -76,9 +73,6 @@ public class FeedFragment extends Fragment {
         adapter.setOnItemClickListener(new FeedAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
-                //ivPostPic = itemView.findViewById(R.id.ivPostPic);
-                //tvUserName = itemView.findViewById(R.id.tvUserName);
-                //ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
 
                 Fragment someFragment = new PostDetailFragment();
                 Bundle bundle = new Bundle();
