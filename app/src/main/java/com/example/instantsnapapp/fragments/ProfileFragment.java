@@ -39,7 +39,7 @@ public class ProfileFragment extends Fragment {
     private TextView tvProfileName;
     private List<Post> profilePosts;
     private ProfileAdapter adapter;
-    private ParseUser currentUser = ParseUser.getCurrentUser();
+    private final ParseUser currentUser = ParseUser.getCurrentUser();
 
     public ProfileFragment() {
 
@@ -93,7 +93,6 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 ParseUser.logOut();
-                //ParseUser currentUser = ParseUser.getCurrentUser();
                 Intent i = new Intent(getContext(), LoginActivity.class);
                 startActivity(i);
             }

@@ -1,7 +1,6 @@
 package com.example.instantsnapapp.fragments;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,10 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.instantsnapapp.R;
-import com.example.instantsnapapp.adapters.FeedAdapter;
 import com.example.instantsnapapp.adapters.FriendAdapter;
-import com.example.instantsnapapp.adapters.ProfileAdapter;
-import com.example.instantsnapapp.models.Post;
 import com.example.instantsnapapp.models.User;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -60,9 +56,6 @@ public class FriendsListFragment extends Fragment {
         adapter.setOnItemClickListener(new FriendAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View itemView, int position) {
-                //ivPostPic = itemView.findViewById(R.id.ivPostPic);
-                //tvUserName = itemView.findViewById(R.id.tvUserName);
-                //ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
 
                 Fragment someFragment = new UserFeedFragment();
                 Bundle bundle = new Bundle();

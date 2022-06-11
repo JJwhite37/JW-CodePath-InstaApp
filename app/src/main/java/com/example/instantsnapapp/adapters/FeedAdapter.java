@@ -1,7 +1,6 @@
 package com.example.instantsnapapp.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +13,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.instantsnapapp.R;
 import com.example.instantsnapapp.models.Post;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
 
 import java.util.List;
 
@@ -71,14 +67,12 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>{
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView tvUserName;
-        //private TextView tvPostDesc;
         private ImageView ivProfilePic;
         private ImageView ivPostPic;
 
         public ViewHolder(@NonNull View itemView,final OnItemClickListener listener) {
             super(itemView);
             tvUserName = itemView.findViewById(R.id.tvUserName);
-            //tvPostDesc = itemView.findViewById(R.id.tvPostDesc);
             ivProfilePic = itemView.findViewById(R.id.ivProfilePic);
             ivPostPic = itemView.findViewById(R.id.ivPostPic);
 
@@ -92,7 +86,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder>{
 
         public void bind(Post posts) {
             tvUserName.setText(posts.getUser().getUsername());
-            //tvPostDesc.setText(posts.getDescription());
             Glide.with(context)
                     .load(posts.getUser().getParseFile("profilePic").getUrl())
                     .transform(new CropCircleTransformation())

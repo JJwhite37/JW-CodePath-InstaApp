@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.instantsnapapp.R;
-import com.example.instantsnapapp.models.Post;
 import com.example.instantsnapapp.models.User;
 
 import java.util.List;

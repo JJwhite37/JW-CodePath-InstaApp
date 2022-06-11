@@ -12,7 +12,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,7 +21,6 @@ import com.example.instantsnapapp.models.Comment;
 import com.example.instantsnapapp.models.Post;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -41,7 +39,6 @@ public class CommentFragment extends Fragment {
     private ProgressBar pbComment;
     private TextView tvCommentTitle;
 
-    // add in loading bar.
     public CommentFragment() {
 
     }
@@ -116,10 +113,10 @@ public class CommentFragment extends Fragment {
 
     private void saveComment(ParseUser user, Post posts, String comment){
 
-        ParseObject newComment = ParseObject.create("Comment");
-        newComment.put("comment",comment);
-        newComment.put("post",posts);
-        newComment.put("user",user);
+        Comment newComment = new Comment();
+        newComment.setComment(comment);
+        newComment.setPost(posts);
+        newComment.setUser(user);
         newComment.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

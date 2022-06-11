@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,8 +14,6 @@ import com.example.instantsnapapp.R;
 import com.example.instantsnapapp.models.Post;
 
 import java.util.List;
-
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 public class ProfileAdapter extends RecyclerView.Adapter<ProfileAdapter.ViewHolder> {
     public static final String TAG = "ProfileAdapter";

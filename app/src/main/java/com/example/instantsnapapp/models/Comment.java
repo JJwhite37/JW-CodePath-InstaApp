@@ -17,11 +17,20 @@ public class Comment extends ParseObject {
     public String getComment() {
         return  getString(KEY_COMMENT);
     }
+    public void setComment(String comment){
+        put("comment",comment);
+    }
     public ParseObject getPost() {
         return  getParseObject(KEY_POST);
     }
+    public void setPost(Post post){
+        put("post",post);
+    }
     public ParseUser getUser() {
         return  getParseUser(KEY_USER);
+    }
+    public void setUser(ParseUser user){
+        put("user",user);
     }
 
 }
