@@ -11,6 +11,7 @@
         android:layout_below="@+id/ivPicProfile"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
+        android:textColor="@color/textPrimary"
         android:textSize="20sp"
         android:transitionName="userName"
         tools:text="username here" />
@@ -39,6 +40,7 @@
         android:layout_below="@+id/tvProfileName"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
+        android:backgroundTint="@color/instaButton"
         android:text="Add Friend"
         android:textSize="20sp" />
 

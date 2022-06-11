@@ -24,6 +24,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="28dp"
         android:layout_toEndOf="@+id/ivFriendPic"
+        android:textColor="@color/textPrimary"
         android:textSize="20sp"
         tools:text="Jeremy" />
 </RelativeLayout>

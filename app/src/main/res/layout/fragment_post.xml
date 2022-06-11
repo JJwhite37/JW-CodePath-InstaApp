@@ -20,6 +20,7 @@
         android:layout_below="@+id/ivPicturePost"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
+        android:backgroundTint="@color/instaButton"
         android:text="take picture"
         android:textSize="20sp" />
 
@@ -30,6 +31,7 @@
         android:layout_below="@+id/btnSnap"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
+        android:backgroundTint="@color/textSecondary"
         android:text="Upload picture"
         android:textSize="20sp" />
 
@@ -44,6 +46,8 @@
         android:gravity="start|top"
         android:hint="type caption here."
         android:inputType="textMultiLine"
+        android:textColor="@color/textPrimary"
+        android:textColorHint="@color/textPrimary"
         android:textSize="20sp" />
 
     <Button
@@ -53,6 +57,7 @@
         android:layout_below="@+id/etCaption"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
+        android:backgroundTint="@color/instaButton"
         android:text="Post"
         android:textSize="20sp" />
 

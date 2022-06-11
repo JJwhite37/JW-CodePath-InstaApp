@@ -26,6 +26,8 @@
         android:inputType="text"
         android:lines="1"
         android:minHeight="48dp"
+        android:textColor="@color/textPrimary"
+        android:textColorHint="@color/textPrimary"
         android:textSize="20sp" />
 
     <EditText
@@ -41,6 +43,8 @@
         android:inputType="text|textPassword"
         android:lines="1"
         android:minHeight="48dp"
+        android:textColor="@color/textPrimary"
+        android:textColorHint="@color/textPrimary"
         android:textSize="20sp" />
 
     <Button
